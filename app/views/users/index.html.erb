@@ -1,0 +1,150 @@
+<head>
+  <style type="text/css">
+      html {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: #000000 url(/globe/loading.gif) center center no-repeat;
+        color: #ffffff;
+        font-family: sans-serif;
+        font-size: 13px;
+        line-height: 20px;
+        height: 100%;
+      }
+
+
+    </style>
+</head>
+
+<div id="container"></div>
+
+<h1>Listing users</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @users.each do |user| %>
+  <tr>
+    <td><%= user.name %></td>
+    <td><%= link_to 'Show', user %></td>
+    <td><%= link_to 'Edit', edit_user_path(user) %></td>
+    <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<% link_to 'New User', new_user_path %>
+
+  <div id="currentInfo">
+    <span id="year1990" class="year">1990</span>
+    <span id="year1995" class="year">1995</span>
+    <span id="year2000" class="year">2000</span>
+  </div>
+
+  <script type="text/javascript" src="/globe/third-party/Three/ThreeWebGL.js"></script>
+  <script type="text/javascript" src="/globe/third-party/Three/ThreeExtras.js"></script>
+  <script type="text/javascript" src="/globe/third-party/Three/RequestAnimationFrame.js"></script>
+  <script type="text/javascript" src="/globe/third-party/Three/Detector.js"></script>
+  <script type="text/javascript" src="/globe/third-party/Tween.js"></script>
+  <script type="text/javascript" src="/globe/globe.js"></script>
+  <script type="text/javascript">
+    
+
+    if(!Detector.webgl){
+      Detector.addGetWebGLMessage();
+    } else {
+
+      var years = ['1990','1995','2000'];
+      var container = document.getElementById('container');
+      var globe = new DAT.Globe(container);
+      console.log(globe);
+      var i, tweens = [];
+
+      var settime = function(globe, t) {
+        return function() {
+          new TWEEN.Tween(globe).to({time: t/years.length},500).easing(TWEEN.Easing.Cubic.EaseOut).start();
+          var y = document.getElementById('year'+years[t]);
+          if (y.getAttribute('class') === 'year active') {
+            return;
+          }
+          var yy = document.getElementsByClassName('year');
+          for(i=0; i<yy.length; i++) {
+            yy[i].setAttribute('class','year');
+          }
+          y.setAttribute('class', 'year active');
+        };
+      };
+
+      for(var i = 0; i<years.length; i++) {
+        var y = document.getElementById('year'+years[i]);
+        y.addEventListener('mouseover', settime(globe,i), false);
+      }
+
+      var xhr;
+      TWEEN.start();
+
+
+      xhr = new XMLHttpRequest();
+      xhr.open('GET', '/globe/population909500.json', true);
+      xhr.onreadystatechange = function(e) {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            window.data = data;
+            for (i=0;i<data.length;i++) {
+              globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
+            }
+            globe.createPoints();
+            settime(globe,0)();
+            globe.animate();
+          }
+        }
+      };
+      xhr.send(null);
+    }
+
+     function onDoubleClick(event) {
+        event.preventDefault();
+
+        var canvas = renderer.domElement;
+        var vector = new THREE.Vector3( ( (event.offsetX) / canvas.width ) * 2 - 1, - ( (event.offsetY) / canvas.height) * 2 + 1,
+0.5 );
+
+        projector.unprojectVector( vector, camera );
+
+        var ray = new THREE.Ray(camera.position, vector.subSelf(camera.position).normalize());
+
+        var intersects = ray.intersectObject(globe3d);
+
+        if (intersects.length > 0) {
+
+            object = intersects[0];
+
+            r = object.object.boundRadius;
+            x = object.point.x;
+            y = object.point.y;
+            z = object.point.z;
+
+            lat = 90 - (Math.acos(y / r)) * 180 / Math.PI;
+            lon = ((270 + (Math.atan2(x, z)) * 180 / Math.PI) % 360) - 180;
+
+            lat = Math.round(lat * 100000) / 100000;
+            lon = Math.round(lon * 100000) / 100000;
+            window.location.href = 'gmaps?lat='+lat+'&lon='+lon;
+
+        }
+    }
+
+  </script>
+  <script src="http://code.jquery.com/jquery-1.7.1.min.js">
+    
+  </script>
