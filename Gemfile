@@ -11,6 +11,8 @@ gem 'figaro'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook', '1.4.0'
 gem 'active_model_serializers'
+gem 'exifr'
+gem 'geocoder'
 
 gem 'jquery-rails'
 
