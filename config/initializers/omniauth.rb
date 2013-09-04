@@ -1,3 +1,4 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :twitter, 'qAJi04ZrwOPMNHzv4A4FQ', '1fTyvqbVUtpT3ZGtsfMha7eFRrwvSKZTSkzUm9Z5bw'
+  provider :twitter, Figaro.env.twitter_consumer_key, Figaro.env.twitter_consumer_secret
+  provider :facebook, Figaro.env.facebook_app_id, Figaro.env.facebook_app_secret
 end
