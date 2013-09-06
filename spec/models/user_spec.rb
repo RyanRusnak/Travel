@@ -10,6 +10,13 @@ describe User do
     it { should validate_uniqueness_of(:uid).scoped_to(:provider) }
   end
   
-  describe "#format_globe_data" do
+  describe "#set_location" do
+    it "return long/lat/manitude array per year" do
+      user = FactoryGirl.create(:user)
+      photo = FactoryGirl.create(:photo, user: user)
+      photo = FactoryGirl.create(:photo, user: user)
+      
+      user.format_globe_data["2013"].last.should == 0.2
+    end
   end
 end
