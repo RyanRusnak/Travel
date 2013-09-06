@@ -4,6 +4,12 @@ development:
   TWITTER_CONSUMER_SECRET: xxxx
   FACEBOOK_APP_ID: xxxx
   FACEBOOK_APP_SECRET: xxxx
+test:
+  HOST: localhost:3000
+  TWITTER_CONSUMER_KEY: xxxx
+  TWITTER_CONSUMER_SECRET: xxxx
+  FACEBOOK_APP_ID: xxxx
+  FACEBOOK_APP_SECRET: xxxx
 production:
   HOST: localhost:3000
   TWITTER_CONSUMER_KEY: xxxx

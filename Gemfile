@@ -13,6 +13,8 @@ gem 'omniauth-facebook', '1.4.0'
 gem 'active_model_serializers'
 gem 'exifr'
 gem 'geocoder'
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+gem 'mini_magick'
 
 gem 'jquery-rails'
 
@@ -29,6 +31,7 @@ group :assets do
 end
 
 group :development, :test do 
+  gem 'rspec-rails', '~> 2.0'
   gem 'pry'
   gem 'pry-rails'
 end
@@ -38,4 +41,13 @@ group :development do
   gem 'binding_of_caller'
   gem 'sextant'
   gem 'mailcatcher'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
+  gem 'mongoid-rspec'
+  gem 'shoulda-matchers'
+  gem 'forgery'
 end

@@ -10,6 +10,11 @@ class Location
   field :country
   field :coordinates, type: Array
 
+  has_many :photos
+  
+  validates_presence_of :coordinates
+  validates_uniqueness_of :coordinates
+
   reverse_geocoded_by :coordinates do |obj, results|
     if geo = results.first
       obj.address = geo.address
@@ -22,7 +27,4 @@ class Location
 
   after_validation :reverse_geocode
 
-  belongs_to :user
-  has_many :photos
-  
 end
