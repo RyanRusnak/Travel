@@ -14,7 +14,6 @@ class SessionsController < ApplicationController
 
   def create
     auth = request.env["omniauth.auth"]
-    binding.pry
     
     if auth
       user = User.where(:provider => auth['provider'], :uid => auth['uid'].to_s).first || User.create_with_omniauth(auth)
